@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem -Path \"d:\\\\Desktop\\\\Assignment-2\\\\Nistula\" -Recurse -Force | ForEach-Object { $_.FullName })",
+      "PowerShell(Get-ChildItem -Path \"d:\\\\Desktop\\\\Assignment-2\\\\Nistula\" -Force -File | Where-Object { $_.Name -match '\\(\\\\.env|package\\\\.json|README|schema\\\\.sql|thinking\\\\.md\\)' } | ForEach-Object { $_.FullName })",
+      "PowerShell(if \\(-not \\(Test-Path 'd:\\\\Desktop\\\\Assignment-2\\\\Nistula\\\\samples'\\)\\) { New-Item -ItemType Directory -Path 'd:\\\\Desktop\\\\Assignment-2\\\\Nistula\\\\samples' | Out-Null }; Get-ChildItem 'd:\\\\Desktop\\\\Assignment-2\\\\Nistula\\\\samples' -Force)",
+      "PowerShell(npm.cmd run build 2>&1)",
+      "PowerShell(npm.cmd test 2>&1)",
+      "PowerShell(npm.cmd run dev 2>&1)"
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guest {
+  id            String         @id @default(uuid()) @db.Uuid
+  fullName      String         @map("full_name")
+  phone         String?
+  email         String?
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  reservations  Reservation[]
+  conversations Conversation[]
+
+  @@index([phone])
+  @@index([email])
+  @@map("guests")
+}
+
+model Reservation {
+  id            String         @id @default(uuid()) @db.Uuid
+  bookingRef    String         @unique @map("booking_ref")
+  propertyId    String         @map("property_id")
+  checkIn       DateTime?      @map("check_in")
+  checkOut      DateTime?      @map("check_out")
+  guestId       String         @map("guest_id") @db.Uuid
+  status        String         @default("unknown")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  guest         Guest          @relation(fields: [guestId], references: [id])
+  conversations Conversation[]
+
+  @@index([bookingRef])
+  @@index([guestId])
+  @@index([propertyId])
+  @@map("reservations")
+}
+
+model Conversation {
+  id            String       @id @default(uuid()) @db.Uuid
+  guestId       String       @map("guest_id") @db.Uuid
+  reservationId String?      @map("reservation_id") @db.Uuid
+  source        String
+  createdAt     DateTime     @default(now()) @map("created_at")
+  guest         Guest        @relation(fields: [guestId], references: [id])
+  reservation   Reservation? @relation(fields: [reservationId], references: [id])
+  messages      Message[]
+
+  @@index([guestId])
+  @@index([reservationId])
+  @@index([source])
+  @@index([createdAt])
+  @@map("conversations")
+}
+
+model Message {
+  id              String    @id @default(uuid()) @db.Uuid
+  conversationId  String    @map("conversation_id") @db.Uuid
+  source          String
+  messageType     String    @map("message_type")
+  messageText     String    @map("message_text")
+  queryType       String    @map("query_type")
+  draftReply      String?   @map("draft_reply")
+  confidenceScore Float     @map("confidence_score")
+  action          String
+  aiGenerated     Boolean   @default(false) @map("ai_generated")
+  agentEdited     Boolean   @default(false) @map("agent_edited")
+  autoSent        Boolean   @default(false) @map("auto_sent")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  conversation    Conversation @relation(fields: [conversationId], references: [id])
+  aiLogs          AiLog[]
+
+  @@index([conversationId])
+  @@index([createdAt])
+  @@index([source])
+  @@index([queryType])
+  @@map("messages")
+}
+
+model AiLog {
+  id             String   @id @default(uuid()) @db.Uuid
+  messageId      String   @map("message_id") @db.Uuid
+  promptTokens   Int?     @map("prompt_tokens")
+  responseTokens Int?     @map("response_tokens")
+  model          String
+  latencyMs      Int      @map("latency_ms")
+  createdAt      DateTime @default(now()) @map("created_at")
+  message        Message  @relation(fields: [messageId], references: [id])
+
+  @@index([messageId])
+  @@index([createdAt])
+  @@map("ai_logs")
+}

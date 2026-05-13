@@ -1,0 +1,43 @@
+### Sample 1 — Pre-sales availability (WhatsApp)
+### Expected: query_type = pre_sales_availability, action = auto_send (or agent_review)
+POST http://localhost:3000/webhook/message
+Content-Type: application/json
+
+{
+  "source": "whatsapp",
+  "guest_name": "Rahul Sharma",
+  "message": "Is the villa available from April 20 to 24? What is the rate for 2 adults?",
+  "timestamp": "2026-05-05T10:30:00Z",
+  "booking_ref": "NIS-2024-0891",
+  "property_id": "villa-b1"
+}
+
+
+### Sample 2 — Post-sales check-in (Airbnb)
+### Expected: query_type = post_sales_checkin, action = auto_send
+POST http://localhost:3000/webhook/message
+Content-Type: application/json
+
+{
+  "source": "airbnb",
+  "guest_name": "Aanya Verma",
+  "message": "Hi, what time is check-in tomorrow and can you share the WiFi password?",
+  "timestamp": "2026-05-12T18:05:00Z",
+  "booking_ref": "NIS-2024-0917",
+  "property_id": "villa-b1"
+}
+
+
+### Sample 3 — Complaint at 3am (Instagram)
+### Expected: query_type = complaint, action = escalate (confidence hard-capped at 0.55)
+POST http://localhost:3000/webhook/message
+Content-Type: application/json
+
+{
+  "source": "instagram",
+  "guest_name": "Priya Menon",
+  "message": "There is no hot water and we have guests arriving for breakfast in 4 hours. This is unacceptable. I want a refund for tonight.",
+  "timestamp": "2026-05-13T03:02:00Z",
+  "booking_ref": "NIS-2024-0934",
+  "property_id": "villa-b1"
+}

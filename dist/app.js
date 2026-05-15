@@ -70,6 +70,12 @@ function createApp() {
     }));
     app.use(express_1.default.json({ limit: "1mb" }));
     app.use(logger_middleware_js_1.requestLogger);
+    app.get("/", (_req, res) => {
+        res.status(200).json({
+            status: "ok",
+            service: "Nistula guest messaging backend"
+        });
+    });
     app.get("/health", (_req, res) => {
         res.json({ status: "ok" });
     });

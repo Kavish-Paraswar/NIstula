@@ -46,7 +46,7 @@ function classifyMessage(messageText) {
         };
     }
     const bestMatch = matches[0];
-    const certainty = bestMatch.queryType === "complaint" ? 0.96 : Math.min(0.92, 0.72 + bestMatch.matchedSignals.length * 0.1);
+    const certainty = bestMatch.queryType === "complaint" ? 0.96 : Math.min(0.92, 0.72 + bestMatch.matchedSignals.length * 0.2);
     return {
         queryType: bestMatch.queryType,
         certainty,

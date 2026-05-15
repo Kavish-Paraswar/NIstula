@@ -6,7 +6,10 @@
       "PowerShell(if \\(-not \\(Test-Path 'd:\\\\Desktop\\\\Assignment-2\\\\Nistula\\\\samples'\\)\\) { New-Item -ItemType Directory -Path 'd:\\\\Desktop\\\\Assignment-2\\\\Nistula\\\\samples' | Out-Null }; Get-ChildItem 'd:\\\\Desktop\\\\Assignment-2\\\\Nistula\\\\samples' -Force)",
       "PowerShell(npm.cmd run build 2>&1)",
       "PowerShell(npm.cmd test 2>&1)",
-      "PowerShell(npm.cmd run dev 2>&1)"
+      "PowerShell(npm.cmd run dev 2>&1)",
+      "Bash(Get-ChildItem -Path \"d:\\\\Desktop\\\\Assignment-2\\\\Nistula\" -Force)",
+      "Bash(npm run *)",
+      "Bash(npm test *)"
     ]
   }
 }

@@ -51,8 +51,11 @@ This makes it trivial to test the webhook end-to-end with just `npm install && n
 ### Health
 
 ```http
+GET /
 GET /health
 ```
+
+Root returns `{"status":"ok","service":"Nistula guest messaging backend"}`. `/health` returns `{"status":"ok"}` for liveness probes.
 
 ### Process Message
 
@@ -143,6 +146,75 @@ This produces a safe default: anything ambiguous, anything short, anything that 
 ## Architecture Decisions
 
 TypeScript keeps DTOs, service boundaries, and API contracts explicit. Prisma provides typed database access and migrations; it sits behind a `getPrisma()` accessor that returns `null` when no DB is configured, so the webhook works in either mode. Zod validates inbound payloads at runtime. Claude is isolated behind `ai.service.ts`, which handles retries and falls back to deterministic templates so the endpoint is never blocked by an AI outage. The pipeline is a flat service chain (`normalize → classify → AI → confidence → action → persist`) — no event bus, no DI container, just functions composed in the controller.
+
+## Advanced Future Scope & Platform Enhancements
+
+The current implementation is intentionally focused on the assessment scope and production-ready backend fundamentals. However, the platform can be expanded into a complete AI-powered hospitality operations system through the following enhancements.
+
+### AI & Intelligence Enhancements
+
+- Context-aware conversational memory using vector databases for personalized guest interactions across multiple stays.
+- AI-generated operational summaries for property managers at shift changes and end-of-day reporting.
+- Automatic guest sentiment scoring with escalation prioritization for high-risk complaints.
+- Smart intent refinement using hybrid rule-based + LLM classification models.
+- Personalized recommendations for nearby experiences, restaurants, transport, and concierge services.
+- AI-powered multilingual support with automatic language detection and translation.
+- Voice-note transcription and processing for WhatsApp voice messages.
+- Predictive guest support using historical guest behavior and previous stay preferences.
+
+### Scalability & Infrastructure
+
+- Queue-based asynchronous processing using BullMQ, RabbitMQ, or Kafka for high-volume message ingestion.
+- Redis caching for property metadata, AI responses, and frequently asked guest queries.
+- Containerized deployment using Docker and Kubernetes for horizontal scalability.
+- CDN-backed static asset delivery and centralized configuration management.
+- Multi-region deployment support for low-latency international guest communication.
+- Distributed tracing and observability using OpenTelemetry.
+
+### Operations & Incident Management
+
+- Real-time incident escalation dashboards for operations teams.
+- SLA tracking for response times, escalations, and caretaker resolution workflows.
+- Automated recurring issue detection and preventive maintenance scheduling.
+- Smart routing of complaints to property-specific support staff.
+- Escalation fallback chains with manager and regional operations alerts.
+- Internal audit timeline for every guest interaction and operational action.
+
+### Hospitality & Booking Integrations
+
+- Direct integration with Airbnb, Booking.com, WhatsApp Business API, and PMS systems.
+- Automated booking synchronization and reservation validation.
+- Dynamic pricing recommendations based on seasonality and occupancy.
+- AI-generated pre-arrival and post-checkout guest communication flows.
+- Unified guest profile management across all booking channels.
+- Digital concierge workflows including airport transfers, chef bookings, and local assistance.
+
+### Analytics & Business Intelligence
+
+- Guest satisfaction analytics dashboard with property-level trends.
+- AI confidence monitoring and response quality evaluation.
+- Revenue insights based on enquiry conversion and booking patterns.
+- Complaint heatmaps and operational bottleneck analysis.
+- Occupancy forecasting and operational demand prediction.
+- Automated monthly operational reports for management teams.
+
+### Security & Reliability
+
+- Role-based access control for operations teams and administrators.
+- Secure API authentication using JWT and rotating API keys.
+- Rate limiting, abuse prevention, and anomaly detection systems.
+- Backup and disaster recovery workflows for operational continuity.
+- AI moderation safeguards to prevent unsafe or non-compliant responses.
+- Full audit logging and compliance-ready operational records.
+
+### Developer Experience & Maintainability
+
+- Comprehensive OpenAPI documentation and SDK generation.
+- CI/CD pipelines with automated testing and deployment validation.
+- End-to-end integration testing using mocked AI responses.
+- Feature flagging support for controlled rollout of AI capabilities.
+- Centralized configuration management for multi-property deployments.
+- Plugin-based architecture for onboarding additional communication channels.
 
 ## Useful Commands
 
